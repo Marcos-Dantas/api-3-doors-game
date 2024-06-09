@@ -1,14 +1,15 @@
 {
   "version": 2,
   "builds": [
-    { "src": "src/server.js", "use": "@vercel/node" }
-  ],
-  "build": {
-    "functions": {
-      "api/**/*.js": {
-        "prerender": false
+      {
+          "src": "src/server.js",
+          "use": "@vercel/node"
       }
-    },
-    "command": "npm run build"
-  }
+  ],
+  "routes": [
+      {
+          "src": "(.*)",
+          "dest": "src/server.js"
+      }
+  ]
 }
