@@ -6,6 +6,7 @@ module.exports = (req, res, next) => {
     console.log(String(process.env.API_TOKEN) == String(apiToken))
     console.log(apiTokenHeader == apiToken)
     if (apiTokenHeader == apiToken) {
+        console.log('here')
         next();
     }else {
         next(new Error("Unauthorized."));

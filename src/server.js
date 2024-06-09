@@ -12,9 +12,12 @@ require('dotenv').config();
 // Rota para obter todos os usuários
 app.get('/users', checkForApiToken, async (req, res) => {
   try {
+    console.log('here232323')
     const users = await prisma.user.findMany();
+    console.log('hereteste')
     res.json(users);
   } catch (error) {
+    console.log('entrou aqui')
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
