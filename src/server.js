@@ -13,6 +13,7 @@ require('dotenv').config();
 app.get('/users', checkForApiToken, async (req, res) => {
   try {
     console.log('here232323')
+    console.log(prisma)
     const users = await prisma.user.findMany();
     
     console.log('hereteste')

@@ -1,19 +1,17 @@
 {
   "name": "api-3doors-game",
   "version": "1.0.0",
-  "type": "module",
-  "description": "",
-  "main": "src/server.js",
+  "description": "a project created by inova/secti trilhas backend",
+  "main": "index.js",
   "scripts": {
-    "vercel-build": "npx prisma generate"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.15.0",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "prisma": "^5.15.0",
-    "dotenv": "^16.4.5"
+    "prisma": "^5.15.0"
   }
 }
