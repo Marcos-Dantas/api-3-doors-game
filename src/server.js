@@ -13,7 +13,7 @@ dotenv.config();
 app.get('/users', async (req, res) => {
   try {
     console.log('here232323')
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({});
     console.log('hereteste')
     res.json(users);
   } catch (error) {
