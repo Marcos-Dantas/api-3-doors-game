@@ -18,14 +18,10 @@ app.get('/users', async (req, res) => {
 // Rota para criar um novo usuário
 app.post('/users', async (req, res) => {
 const { name, email, password } = req.body;
-try {
-    const newUser = await prisma.user.create({
-    data: { name, email, password },
-    });
-    res.json(newUser);
-} catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-}
+const newUser = await prisma.user.create({
+  data: { name, email, password },
+});
+res.status(201).json(newUser)
 });
 
 // Rota para pegar um usuário especifico
