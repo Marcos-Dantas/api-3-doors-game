@@ -17,9 +17,9 @@ app.get('/users', async (req, res) => {
   
 // Rota para criar um novo usuário
 app.post('/users', async (req, res) => {
-const { name, email, password } = req.body;
+const { name, email} = req.body;
 const newUser = await prisma.user.create({
-  data: { name, email, password },
+  data: { name, email},
 });
 res.status(201).json(newUser)
 });
