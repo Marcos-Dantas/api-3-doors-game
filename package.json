@@ -1,10 +1,11 @@
 {
   "name": "api-3doors-game",
   "version": "1.0.0",
+  "type": "module",
   "description": "a project created by inova/secti trilhas backend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "vercel-build": "npx prisma generate"
   },
   "author": "",
   "license": "ISC",

@@ -1,21 +1,19 @@
-const { PrismaClient } = require('@prisma/client');
+import express from "express";
+import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv"
+
 const prisma = new PrismaClient();
 
-var express = require("express");
 var app = express();
 app.use(express.json());
 
-var checkForApiToken = require("./checkForApiToken");
-
-require('dotenv').config();
+dotenv.config();
 
 // Rota para obter todos os usuários
-app.get('/users', checkForApiToken, async (req, res) => {
+app.get('/users', async (req, res) => {
   try {
     console.log('here232323')
-    console.log(prisma)
     const users = await prisma.user.findMany();
-    
     console.log('hereteste')
     res.json(users);
   } catch (error) {
@@ -25,7 +23,7 @@ app.get('/users', checkForApiToken, async (req, res) => {
 });
   
 // Rota para criar um novo usuário
-app.post('/users', checkForApiToken, async (req, res) => {
+app.post('/users', async (req, res) => {
 const { name, email, password } = req.body;
 try {
     const newUser = await prisma.user.create({
@@ -38,7 +36,7 @@ try {
 });
 
 // Rota para pegar um usuário especifico
-app.get('/user/:id', checkForApiToken, async (req, res) => {
+app.get('/user/:id', async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: {id: parseInt(req.params.id, 10)}
@@ -54,7 +52,7 @@ app.get('/user/:id', checkForApiToken, async (req, res) => {
 });
 
 // Rota para deletar um usuário
-app.delete('/user/:id', checkForApiToken, async (req, res) => {
+app.delete('/user/:id', async (req, res) => {
   try {
     const user = await prisma.user.delete({
       where: {id: parseInt(req.params.id, 10)}
