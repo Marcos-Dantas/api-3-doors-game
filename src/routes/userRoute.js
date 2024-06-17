@@ -1,55 +1,57 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import userController from '../controllers/userController.js';
+import {loginValidator, createUserValidator} from '../validators/validators.js';
+import dotenv from "dotenv"
+import {validationResult} from "express-validator";
 
 const routes = express.Router();
 
 const prisma = new PrismaClient();
 
-// Rota para obter todos os usuários
-routes.get('/users', async (req, res) => {
-  const users = await prisma.user.findMany({});
-  res.status(200).json(users);
-});
+dotenv.config();
 
 // Rota para criar um novo usuário
-routes.post('/users', async (req, res) => {
-  const { name, email } = req.body;
-  const newUser = await prisma.user.create({
-    data: { name, email },
-  });
-  res.status(201).json(newUser);
-});
-
-// Rota para pegar um usuário especifico
-routes.get('/user/:id', async (req, res) => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: parseInt(req.params.id, 10) },
+routes.post('/users', createUserValidator, async (req, res) => {
+  const errors = validationResult(req)
+  if (errors.isEmpty()) {
+    const { name, email, password, city, state, age} = req.body;
+    const newUser = await prisma.user.create({
+      data: {
+        email: email,
+        name: name, 
+        password: password, 
+        city: city, 
+        state: state, 
+        age: parseInt(age),
+      },
     });
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).json({ error: 'User not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    const newPlayer = await prisma.player.create({
+      data: {
+        userEmail: newUser.email, 
+      },
+    });
+    res.status(201).json(newUser)
+  }else {
+    res.status(422).json({errors: errors.array()})
   }
 });
 
-// Rota para deletar um usuário
-routes.delete('/user/:id', async (req, res) => {
-  try {
-    const user = await prisma.user.delete({
-      where: { id: parseInt(req.params.id, 10) },
-    });
-    res.json({ message: 'Usuario deletado com sucesso', user });
-  } catch (error) {
-    if (error.code === 'P2025') {
-      res.status(404).json({ error: 'User not found' });
+// Rota para login
+routes.post('/user/', loginValidator, async (req, res) => {
+  const errors = validationResult(req)
+  if (errors.isEmpty()) {
+    const {email, password} = req.body;
+    const user = await prisma.user.findUnique({
+      where: {email: email, password: password}
+    })
+    if (user) {
+      res.json(user);
     } else {
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(404).json({ error: 'Usuario não encontrado' });
     }
+  }else {
+    res.status(422).json({errors: errors.array()})
   }
 });
 
