@@ -5,7 +5,7 @@
   "description": "a project created by inova/secti trilhas backend",
   "main": "index.js",
   "scripts": {
-    "vercel-build": "npx prisma generate"
+    "vercel-build": "npx prisma generate && npx prisma db push"
   },
   "author": "",
   "license": "ISC",
