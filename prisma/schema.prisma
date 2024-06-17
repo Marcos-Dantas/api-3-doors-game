@@ -8,7 +8,24 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(uuid()) @map("_id")
+  id    String  @id @default(uuid()) @map("_id") 
   name  String
   email String  @unique
+  password String
+  city String 
+  state String
+  age Int
+  player Player?
+}
+
+model Player {
+    idPlayer String @id @default(uuid()) @unique 
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    score Int?
+    timeFinishedGame DateTime?
+    question1 String? // Conhecia a Lenda?
+    question2 String?  // O jogo ajudou você a conhecer essas lendas?
+    user User @relation(fields: [userEmail], references: [email])
+    userEmail String @unique
 }
