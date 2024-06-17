@@ -1,7 +1,5 @@
 import {body} from "express-validator";
 
-const prisma = new PrismaClient();
-
 export const createUserValidator = [
     body('email', 'Email não pode ser vazio').not().isEmpty(),
     body('name', 'Nome não pode ser vazio').not().isEmpty(),
