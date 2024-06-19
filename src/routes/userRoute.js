@@ -14,7 +14,7 @@ const { createUserValidator, loginValidator } = getValidators(prisma);
 dotenv.config();
 
 // Rota para criar um novo usuário
-routes.post('/users', createUserValidator, async (req, res) => {
+routes.post('/signup', createUserValidator, async (req, res) => {
   const errors = validationResult(req)
 
   if (errors.isEmpty()) {
@@ -45,7 +45,7 @@ routes.post('/users', createUserValidator, async (req, res) => {
 });
 
 // Rota para login
-routes.post('/user/', loginValidator, async (req, res) => {
+routes.post('/login/', loginValidator, async (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
     const {email, password} = req.body;
@@ -54,16 +54,12 @@ routes.post('/user/', loginValidator, async (req, res) => {
       where: {email: email}
     })
     
-    if (!user) {
-      return res.status(404).json({ error: 'Usuario não encontrado' });
-    } 
-    
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(404).json({ error: 'Senha inválida' });
-    }
+    if (!user || !(bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ error: 'Credenciais inválidas' });
+    }else {
 
-    return res.json(user);
+      res.json({ id: user.id, email: user.email});
+    } 
 
   }else {
     return res.status(422).json({errors: errors.array()})
