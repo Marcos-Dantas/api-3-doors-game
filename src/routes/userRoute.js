@@ -45,7 +45,7 @@ routes.post('/signup', createUserValidator, async (req, res) => {
 });
 
 // Rota para login
-routes.post('/login/', loginValidator, async (req, res) => {
+routes.post('/login', loginValidator, async (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
     const {email, password} = req.body;
