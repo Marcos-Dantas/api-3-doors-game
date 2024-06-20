@@ -54,11 +54,12 @@ routes.post('/login', loginValidator, async (req, res) => {
       where: {email: email}
     })
     
-    if (!user || !(bcrypt.compare(password, user.password))) {
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!user || !passwordMatch) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }else {
-
-      res.json({ id: user.id, email: user.email});
+      return res.json({ id: user.id, email: user.email});
     } 
 
   }else {
