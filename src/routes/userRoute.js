@@ -13,7 +13,60 @@ const { createUserValidator, loginValidator } = getValidators(prisma);
 
 dotenv.config();
 
-// Rota para criar um novo usuário
+/**
+ * @swagger
+ * /signup:
+ *   post:
+ *     summary: Cria um novo usuário
+ *     tags:
+ *       - Usuários
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Nome do usuário
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 description: Email do usuário
+ *                 example: john.doe@example.com
+ *               password:
+ *                 type: string
+ *                 description: Senha do usuário
+ *                 example: mypassword
+ *               city:
+ *                 type: string
+ *                 description: Cidade do usuário
+ *                 example: São Paulo
+ *               state:
+ *                 type: string
+ *                 description: Estado do usuário
+ *                 example: SP
+ *               age:
+ *                 type: integer
+ *                 description: Idade do usuário
+ *                 example: 30
+ *     responses:
+ *       201:
+ *         description: Usuário criado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       422:
+ *         description: Dados inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ValidationErrorResponse'
+ *     security:
+ *       - bearerAuth: []
+ */
 routes.post('/signup', createUserValidator, async (req, res) => {
   const errors = validationResult(req)
 
@@ -44,7 +97,7 @@ routes.post('/signup', createUserValidator, async (req, res) => {
   }
 });
 
-// Rota para login
+
 routes.post('/login', loginValidator, async (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
