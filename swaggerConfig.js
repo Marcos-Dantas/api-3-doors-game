@@ -3,12 +3,12 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Sua API',
+      title: 'API-3DOORS-GAME',
       version: '1.0.0',
-      description: 'Uma descrição simples da sua API',
+      description: 'Nossa API que faz o cadastro dos usuários, e serve como uma interface entre o nosso jogo e a nossa landing page',
     },
   },
-  apis: ['./src/routers/*.js']
+  apis: ['./src/routes/*.js']
   
 };
 

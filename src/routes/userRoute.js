@@ -29,43 +29,55 @@ dotenv.config();
  *             properties:
  *               name:
  *                 type: string
- *                 description: Nome do usuário
- *                 example: John Doe
  *               email:
  *                 type: string
- *                 description: Email do usuário
- *                 example: john.doe@example.com
  *               password:
  *                 type: string
- *                 description: Senha do usuário
- *                 example: mypassword
  *               city:
  *                 type: string
- *                 description: Cidade do usuário
- *                 example: São Paulo
  *               state:
  *                 type: string
- *                 description: Estado do usuário
- *                 example: SP
  *               age:
- *                 type: integer
- *                 description: Idade do usuário
- *                 example: 30
+ *                 type: string
  *     responses:
  *       201:
  *         description: Usuário criado com sucesso
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 city:
+ *                   type: string
+ *                 state:
+ *                   type: string
+ *                 age:
+ *                   type: string
  *       422:
- *         description: Dados inválidos
+ *         description: Erros de validação
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ValidationErrorResponse'
- *     security:
- *       - bearerAuth: []
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                       param:
+ *                         type: string
+ *                       location:
+ *                         type: string
+ *                         example: body
  */
 routes.post('/signup', createUserValidator, async (req, res) => {
   const errors = validationResult(req)
@@ -97,7 +109,46 @@ routes.post('/signup', createUserValidator, async (req, res) => {
   }
 });
 
-
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Autentica um usuário existente
+ *     tags:
+ *       - Autenticação
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Autenticação bem-sucedida
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 email:
+ *                   type: string
+ *       401:
+ *         description: Credenciais inválidas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 routes.post('/login', loginValidator, async (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
