@@ -172,4 +172,6 @@ routes.post('/login', loginValidator, async (req, res) => {
 
 routes.get('/users', userController.findAllUsers);
 
+routes.get('/users/top-ranking', userController.findTopRanking);
+
 export default routes;

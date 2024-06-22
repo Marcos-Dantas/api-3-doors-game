@@ -9,4 +9,16 @@ export default class userController {
       return res.status(422).json({ errors: err });
     }
   };
+
+  static findTopRanking = async (req, res) => {
+    try {
+      const rankingUsers = await userService.findRankingUsers();
+      return res.status(200).json({ rankingUsers });
+    } catch (err) {
+      return res.status(err.status || 500).json({
+        status: err.status || 500,
+        message: err.message || 'Internal Error',
+      });
+    }
+  };
 }
