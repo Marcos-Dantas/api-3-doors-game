@@ -5,16 +5,37 @@ import getValidators from '../validators/validators.js';
 import dotenv from "dotenv"
 import {validationResult} from "express-validator";
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const routes = express.Router();
-
+const SECRET_KEY = 'kGGD2QvloDQd4dAqoINspvMKIzPTNshG';
+const API_KEY = 'b3c8e11b-1701-475e-bfd2-89b4517257e1';
 const prisma = new PrismaClient();
 const { createUserValidator, loginValidator } = getValidators(prisma);
 
 dotenv.config();
 
+const verifyApiKey = async (req, res, next) => {
+  const apiKey = req.headers['x-api-key'];
+
+  if (!apiKey) {
+    return res.status(403).json({ error: 'API Key não fornecida' });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { apiKey: apiKey }
+  });
+
+  if (!user) {
+    return res.status(401).json({ error: 'API Key inválida' });
+  }
+
+  req.user = user;
+  next();
+}
+
 // Rota para criar um novo usuário
-routes.post('/signup', createUserValidator, async (req, res) => {
+routes.post('/signup', verifyApiKey, createUserValidator, async (req, res) => {
   const errors = validationResult(req)
 
   if (errors.isEmpty()) {
@@ -58,7 +79,9 @@ routes.post('/login', loginValidator, async (req, res) => {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }else {
 
-      res.json({ id: user.id, email: user.email});
+      const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+
+      return res.json({ token });
     } 
 
   }else {
