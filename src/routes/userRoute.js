@@ -84,7 +84,7 @@ dotenv.config();
  *                         example: body
  */
 routes.post('/signup', verifyApiKey, createUserValidator, async (req, res) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
 
   if (errors.isEmpty()) {
     const { name, email, password, city, state, age } = req.body;
@@ -154,7 +154,7 @@ routes.post('/signup', verifyApiKey, createUserValidator, async (req, res) => {
  *                   type: string
  */
 routes.post('/login', verifyApiKey, loginValidator, async (req, res) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (errors.isEmpty()) {
     const { email, password } = req.body;
 
@@ -166,22 +166,22 @@ routes.post('/login', verifyApiKey, loginValidator, async (req, res) => {
 
     if (!user || !passwordMatch) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
-    }else {
-
+    } else {
       const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY);
 
       return res.json({ id: user.id, token: token });
-    } 
-
-  }else {
-    return res.status(422).json({errors: errors.array()})
+    }
+  } else {
+    return res.status(422).json({ errors: errors.array() });
   }
 });
 
-// rota de exemplo, apenas para testar a verificação do token de logado esta correta 
+// rota de exemplo, apenas para testar a verificação do token de logado esta correta
 // routes.post('/store-user-informations', verifyApiKey, verifyToken, async (req, res) => {
 //     return res.json({resuld:'parabens!! dados do seu usuario foram armazenados'});
 // });
+
+routes.get('/users', userController.findAllUsers);
 
 routes.get('/users/top-ranking', userController.findTopRanking);
 
