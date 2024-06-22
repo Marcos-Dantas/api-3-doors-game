@@ -5,8 +5,12 @@ import getValidators from '../validators/validators.js';
 import dotenv from 'dotenv';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { verifyApiKey, verifyToken } from '../middlewares/authMiddleware.js';
 
 const routes = express.Router();
+
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const prisma = new PrismaClient();
 const { createUserValidator, loginValidator } = getValidators(prisma);
@@ -79,8 +83,8 @@ dotenv.config();
  *                         type: string
  *                         example: body
  */
-routes.post('/signup', createUserValidator, async (req, res) => {
-  const errors = validationResult(req);
+routes.post('/signup', verifyApiKey, createUserValidator, async (req, res) => {
+  const errors = validationResult(req)
 
   if (errors.isEmpty()) {
     const { name, email, password, city, state, age } = req.body;
@@ -149,8 +153,8 @@ routes.post('/signup', createUserValidator, async (req, res) => {
  *                 error:
  *                   type: string
  */
-routes.post('/login', loginValidator, async (req, res) => {
-  const errors = validationResult(req);
+routes.post('/login', verifyApiKey, loginValidator, async (req, res) => {
+  const errors = validationResult(req)
   if (errors.isEmpty()) {
     const { email, password } = req.body;
 
@@ -162,14 +166,21 @@ routes.post('/login', loginValidator, async (req, res) => {
 
     if (!user || !passwordMatch) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
-    } else {
-      return res.status(200).json({ id: user.id, email: user.email });
-    }
-  } else {
-    return res.status(422).json({ errors: errors.array() });
+    }else {
+
+      const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY);
+
+      return res.json({ id: user.id, token: token });
+    } 
+
+  }else {
+    return res.status(422).json({errors: errors.array()})
   }
 });
 
-routes.get('/users', userController.findAllUsers);
+// rota de exemplo, apenas para testar a verificação do token de logado esta correta 
+// routes.post('/store-user-informations', verifyApiKey, verifyToken, async (req, res) => {
+//     return res.json({resuld:'parabens!! dados do seu usuario foram armazenados'});
+// });
 
 export default routes;
