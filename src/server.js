@@ -10,7 +10,7 @@ const PORT = 3000;
 var app = express();
 
 // Rota para documentação
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, { customCssUrl: CSS_URL }));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 // app.use(
 //   "/api-docs",
 //   swaggerUI.serve,
