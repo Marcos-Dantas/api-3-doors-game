@@ -2,8 +2,8 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import userController from '../controllers/userController.js';
 import getValidators from '../validators/validators.js';
-import dotenv from "dotenv"
-import {validationResult} from "express-validator";
+import dotenv from 'dotenv';
+import { validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 
 const routes = express.Router();
@@ -80,32 +80,32 @@ dotenv.config();
  *                         example: body
  */
 routes.post('/signup', createUserValidator, async (req, res) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
 
   if (errors.isEmpty()) {
-    const { name, email, password, city, state, age} = req.body;
+    const { name, email, password, city, state, age } = req.body;
     // Gerar o hash da senha
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    
+
     const newUser = await prisma.user.create({
       data: {
         email: email,
-        name: name, 
-        password: hashedPassword, 
-        city: city, 
-        state: state, 
+        name: name,
+        password: hashedPassword,
+        city: city,
+        state: state,
         age: parseInt(age),
       },
     });
     const newPlayer = await prisma.player.create({
       data: {
-        userEmail: newUser.email, 
+        userEmail: newUser.email,
       },
     });
-    return res.status(201).json(newUser)
-  }else {
-    return res.status(422).json({errors: errors.array()})
+    return res.status(201).json(newUser);
+  } else {
+    return res.status(422).json({ errors: errors.array() });
   }
 });
 
@@ -150,25 +150,33 @@ routes.post('/signup', createUserValidator, async (req, res) => {
  *                   type: string
  */
 routes.post('/login', loginValidator, async (req, res) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (errors.isEmpty()) {
-    const {email, password} = req.body;
-    
+    const { email, password } = req.body;
+
     const user = await prisma.user.findUnique({
-      where: {email: email}
-    })
-    
+      where: { email: email },
+    });
+
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!user || !passwordMatch) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
-    }else {
-      return res.json({ id: user.id, email: user.email});
-    } 
-
-  }else {
-    return res.status(422).json({errors: errors.array()})
+    } else {
+      return res.json({ id: user.id, email: user.email });
+    }
+  } else {
+    return res.status(422).json({ errors: errors.array() });
   }
 });
+
+//get top 3 jogadores
+//routes.get('/user/:id');
+
+//realizar
+//routes.put();
+
+//realizar
+//routes.delete();
 
 export default routes;
