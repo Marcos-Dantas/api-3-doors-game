@@ -35,6 +35,72 @@ const verifyApiKey = async (req, res, next) => {
 }
 
 // Rota para criar um novo usuário
+/**
+ * @swagger
+ * /signup:
+ *   post:
+ *     summary: Cria um novo usuário
+ *     tags:
+ *       - Usuários
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               state:
+ *                 type: string
+ *               age:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Usuário criado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 city:
+ *                   type: string
+ *                 state:
+ *                   type: string
+ *                 age:
+ *                   type: string
+ *       422:
+ *         description: Erros de validação
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                       param:
+ *                         type: string
+ *                       location:
+ *                         type: string
+ *                         example: body
+ */
 routes.post('/signup', verifyApiKey, createUserValidator, async (req, res) => {
   const errors = validationResult(req)
 
@@ -65,7 +131,46 @@ routes.post('/signup', verifyApiKey, createUserValidator, async (req, res) => {
   }
 });
 
-// Rota para login
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Autentica um usuário existente
+ *     tags:
+ *       - Autenticação
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Autenticação bem-sucedida
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 email:
+ *                   type: string
+ *       401:
+ *         description: Credenciais inválidas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
 routes.post('/login', loginValidator, async (req, res) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
@@ -75,7 +180,9 @@ routes.post('/login', loginValidator, async (req, res) => {
       where: {email: email}
     })
     
-    if (!user || !(bcrypt.compare(password, user.password))) {
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!user || !passwordMatch) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     }else {
 
