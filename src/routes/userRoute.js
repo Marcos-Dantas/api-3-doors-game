@@ -163,20 +163,13 @@ routes.post('/login', loginValidator, async (req, res) => {
     if (!user || !passwordMatch) {
       return res.status(401).json({ error: 'Credenciais inválidas' });
     } else {
-      return res.json({ id: user.id, email: user.email });
+      return res.status(200).json({ id: user.id, email: user.email });
     }
   } else {
     return res.status(422).json({ errors: errors.array() });
   }
 });
 
-//get top 3 jogadores
-//routes.get('/user/:id');
-
-//realizar
-//routes.put();
-
-//realizar
-//routes.delete();
+routes.get('/users', userController.findAllUsers);
 
 export default routes;
