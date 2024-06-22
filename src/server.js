@@ -4,7 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerSpecs from '../swaggerConfig.js';
 
 // CDN CSS
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.6.3/swagger-ui.min.css";
+const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui.min.css";
 
 const PORT = 3000;
 var app = express();
