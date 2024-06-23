@@ -3,6 +3,8 @@ import routes from './routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import path from 'path';
+import cors from 'cors';
+
 const swaggerDocument = YAML.load(
   path.join(process.cwd(), 'src', 'swagger', 'swaggerDocument.yaml'),
 );
@@ -20,6 +22,9 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, { customCssUrl: CSS_URL }),
 );
+
+// cors adicionado apenas para testar das rotas do frontend
+app.use(cors())
 
 app.listen(PORT, () => {
   console.log('Server running on port 3000');
