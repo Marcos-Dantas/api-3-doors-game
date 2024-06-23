@@ -63,6 +63,18 @@ paths:
                     type: string
                   age:
                     type: string
+        403:
+          description: API Key não fornecida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKey"   
+        401:
+          description: API Key inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKey"       
         422:
           description: Erros de validação
           content:
@@ -108,7 +120,7 @@ paths:
                 properties:
                   id:
                     type: integer
-                  email:
+                  token:
                     type: string
         401:
           description: Credenciais inválidas
@@ -119,6 +131,12 @@ paths:
                 properties:
                   error:
                     type: string
+        403:
+          description: API Key não fornecida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKey"          
   /users/top-ranking:
     get:
       summary: Lista de top jogadores
@@ -147,6 +165,18 @@ paths:
                     type: integer
                   message:
                     type: string
+        403:
+          description: API Key não fornecida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKey"   
+        401:
+          description: API Key inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKey"   
         500:
           description: Internal Error
           content:
@@ -181,6 +211,18 @@ paths:
           content:
             application/json:
               example: "Usuario não encontrado."
+        403:
+          description: API Key não fornecida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKey"   
+        401:
+          description: API Key inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKey"   
         500:
           description: Internal Error
           content:
@@ -194,6 +236,12 @@ paths:
                     type: string        
 
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API Key necessária para autenticação
   schemas:
     User:
       type: object
@@ -210,3 +258,11 @@ components:
           type: string
         age:
           type: integer
+    ApiKey:
+      type: object
+      properties:
+        error:
+          type: string  
+
+security:
+  - ApiKeyAuth: []

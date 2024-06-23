@@ -24,7 +24,7 @@ app.use(
 );
 
 // cors adicionado apenas para testar das rotas do frontend
-app.use(cors())
+app.use(cors());
 
 app.listen(PORT, () => {
   console.log('Server running on port 3000');
