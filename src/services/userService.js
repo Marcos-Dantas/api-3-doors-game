@@ -17,9 +17,9 @@ export default class userService {
       const limit = 3;
       const topPlayers = await Player.topPlayers(limit);
       if (!topPlayers || topPlayers.length === 0) {
-        throw new UnprocessableEntity('Lista de Players Vazia.');
+        throw new UnprocessableEntity('Lista de Score vazia.');
       }
-      const dadosUsers = [];
+      let dadosUsers = [];
       topPlayers.map(async (player) => {
         dadosUsers.push({
           email: player.userEmail,

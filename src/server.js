@@ -1,16 +1,15 @@
-import express from "express";
+import express from 'express';
 import routes from './routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpecs from '../swaggerConfig.js';
-
-// CDN CSS NECESSARIO PARA CARREGAR O SWAGGER EM PRODUÇÃO
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui.min.css";
+import YAML from 'yamljs';
+const swaggerDocument = YAML.load('src/swagger/swaggerDocument.yaml');
 
 const PORT = 3000;
 var app = express();
 
 // Rota para documentação
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, { customCssUrl: CSS_URL }));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(PORT, () => {
   console.log('Server running on port 3000');

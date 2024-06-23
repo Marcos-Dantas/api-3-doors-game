@@ -1,0 +1,149 @@
+openapi: 3.0.0
+info: 
+  title: API-3DOORS-GAME
+    version: 1.0.0
+  description: 'Nossa API que faz o cadastro dos usuários, e serve como uma interface entre o nosso jogo e a nossa landing page.'
+  contact: 
+    name: Suporte a Devs
+    email: kisnaiver1223@gmail.com
+  license:
+    name: "Lincença: GPLv3"
+    url: https://www.gnu.org/licenses/gpl-3.0.html
+externalDocs:
+  description: Link repositório
+  url: https://github.com/Marcos-Dantas/api-3-doors-game
+tags:
+- name: Usuários
+  description: Ações quanto ao usuário
+servers:
+  - url: https://api-3-doors-game.vercel.app/
+  - url: http://localhost:3000/
+paths:
+  /signup:
+    post:
+      tags:
+      - Usuários
+      summary: Cria um novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                age:
+                  type: string
+      responses:
+        201:
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  city:
+                    type: string
+                  state:
+                    type: string
+                  age:
+                    type: string
+        422:
+          description: Erros de validação
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
+                          example: body
+  /login:
+    post:
+      summary: Autentica um usuário existente
+      tags:
+        - Usuários
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Autenticação bem-sucedida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  email:
+                    type: string
+        401:
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /users/top-ranking:
+    get:
+      summary: Lista de top jogadres
+      tags:
+        - Usuários
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  score:
+                    type: integer
+        422:
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
