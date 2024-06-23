@@ -74,8 +74,10 @@ routes.post('/login', verifyApiKey, loginValidator, async (req, res) => {
 // routes.post('/store-user-informations', verifyApiKey, verifyToken, async (req, res) => {
 //     return res.json({resuld:'parabens!! dados do seu usuario foram armazenados'});
 // });
-routes.get('/users/top-ranking', userController.findTopRanking);
-routes.get('/users/:email', userController.findUserByEmail);
-routes.get('/users', userController.findAllUsers);
+routes.get('/users/top-ranking', verifyApiKey, userController.findTopRanking);
+routes.get('/users/:email', verifyApiKey, userController.findUserByEmail);
+routes.put('/users/:email', verifyApiKey, userController.atualizaDadosUser);
+routes.get('/users', verifyApiKey, userController.findAllUsers);
+routes.delete('/users', verifyApiKey, userController.deleteUser);
 
 export default routes;

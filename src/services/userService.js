@@ -33,6 +33,9 @@ export default class userService {
       });
       return dadosUsers;
     } catch (err) {
+      if (err instanceof UnprocessableEntity) {
+        throw err;
+      }
       throw new InternalServerError();
     }
   };
@@ -46,7 +49,29 @@ export default class userService {
       delete user.password;
       return user;
     } catch (err) {
+      if (err instanceof NotFound) {
+        throw err;
+      }
       throw new InternalServerError();
+    }
+  };
+
+  static deleteUser = async (email) => {
+    try {
+      await Player.deletePlayer(email);
+      await User.deleteUser(email);
+      return true;
+    } catch (err) {
+      throw new InternalServerError();
+    }
+  };
+
+  static atualizaDadosUser = async (email, dados) => {
+    try {
+      const userUpdated = User.updateUser(email, dados);
+      return userUpdated;
+    } catch (err) {
+      throw err;
     }
   };
 }

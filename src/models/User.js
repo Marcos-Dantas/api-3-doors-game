@@ -12,4 +12,19 @@ export default class User {
       where: { email: email },
     });
   }
+
+  static async deleteUser(email) {
+    return await prisma.user.delete({
+      where: { email },
+    });
+  }
+
+  static async updateUser(email, data) {
+    return await prisma.user.update({
+      where: { email },
+      data: {
+        ...data,
+      },
+    });
+  }
 }
