@@ -11,6 +11,7 @@ import {
   verifyToken,
   validateData,
 } from '../middlewares/authMiddleware.js';
+import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RE_KEY);
 const routes = express.Router();
