@@ -31,7 +31,7 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                message:
                   type: string
                 email:
                   type: string
@@ -51,30 +51,21 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                  name:
+                  message:
                     type: string
-                  email:
-                    type: string
-                  city:
-                    type: string
-                  state:
-                    type: string
-                  age:
-                    type: string
+                    example: "Usuário criado."
         403:
           description: API Key não fornecida
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiKey"   
+                $ref: "#/components/schemas/ApiKeyError"   
         401:
           description: API Key inválida
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiKey"       
+                $ref: "#/components/schemas/ApiKeyError"       
         422:
           description: Erros de validação
           content:
@@ -87,13 +78,8 @@ paths:
                     items:
                       type: object
                       properties:
-                        msg:
-                          type: string
                         param:
                           type: string
-                        location:
-                          type: string
-                          example: body
   /login:
     post:
       summary: Autentica um usuário existente
@@ -136,7 +122,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiKey"          
+                $ref: "#/components/schemas/ApiKeyError"          
   /users/top-ranking:
     get:
       summary: Lista de top jogadores
@@ -170,13 +156,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiKey"   
+                $ref: "#/components/schemas/ApiKeyError"   
         401:
           description: API Key inválida
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiKey"   
+                $ref: "#/components/schemas/ApiKeyError"   
         500:
           description: Internal Error
           content:
@@ -216,13 +202,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiKey"   
+                $ref: "#/components/schemas/ApiKeyError"   
         401:
           description: API Key inválida
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiKey"   
+                $ref: "#/components/schemas/ApiKeyError"   
         500:
           description: Internal Error
           content:
@@ -258,7 +244,7 @@ components:
           type: string
         age:
           type: integer
-    ApiKey:
+    ApiKeyError:
       type: object
       properties:
         error:
