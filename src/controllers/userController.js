@@ -1,5 +1,5 @@
 import userService from '../services/userService.js';
-import verifyToken from '../middlewares/authMiddleware.js';
+import { verifyToken } from '../middlewares/authMiddleware.js';
 
 export default class userController {
   static findAllUsers = async (req, res) => {
