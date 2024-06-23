@@ -73,21 +73,26 @@ routes.post('/login', verifyApiKey, loginValidator, async (req, res) => {
 });
 
 routes.post("/sendmail", verifyApiKey, async (req, res) => {
-  const { email, message } = req.body;
-  console.log(email, message);
-  const { data, error } = await resend.emails.send({
-    from: "3DOORS <onboarding@resend.dev>",
-    to: ["3doors.suporte@gmail.com"],
-    subject: "Report",
-    html: `
-    E-mail: ${email} <br>
-    Report: ${message}
-    `,
-  });
-  if (error) {
-    return res.status(400).json({ error });
-  }
-  res.status(200).json({ message: "E-mail enviado com sucesso" });
+  try {
+    const { email, message } = req.body;
+    console.log(email, message);
+    const { data, error } = await resend.emails.send({
+      from: "3DOORS <onboarding@resend.dev>",
+      to: ["3doors.suporte@gmail.com"],
+      subject: "Report",
+      html: `
+      E-mail: ${email} <br>
+      Report: ${message}
+      `,
+    });
+    if (error) {
+      return res.status(400).json({ error });
+    }
+    res.status(200).json({ message: "E-mail enviado com sucesso" });
+  }catch (err) {
+    console.error("Erro ao enviar e-mail:", err);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  } 
 });
 
 // rota de exemplo, apenas para testar a verificação do token de logado esta correta
