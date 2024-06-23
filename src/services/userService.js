@@ -3,6 +3,7 @@ import Player from '../models/Player.js';
 import {
   NotFound,
   UnprocessableEntity,
+  InternalServerError,
 } from './exceptions/httpRequestError.js';
 
 export default class userService {
@@ -11,7 +12,7 @@ export default class userService {
       const users = await User.findAllUsers();
       return users;
     } catch (err) {
-      return err;
+      throw new InternalServerError();
     }
   };
 
@@ -25,13 +26,14 @@ export default class userService {
       let dadosUsers = [];
       topPlayers.map(async (player) => {
         dadosUsers.push({
+          nome: player.user.name,
           email: player.userEmail,
           score: player.score,
         });
       });
       return dadosUsers;
     } catch (err) {
-      throw err;
+      throw new InternalServerError();
     }
   };
 
@@ -44,7 +46,7 @@ export default class userService {
       delete user.password;
       return user;
     } catch (err) {
-      throw err;
+      throw new InternalServerError();
     }
   };
 }
