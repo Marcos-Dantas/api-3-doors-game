@@ -90,8 +90,7 @@ routes.post("/sendmail", verifyApiKey, async (req, res) => {
     }
     res.status(200).json({ message: "E-mail enviado com sucesso" });
   }catch (err) {
-    console.error("Erro ao enviar e-mail:", err);
-    res.status(500).json({ error: "Erro interno do servidor" });
+    res.status(500).json({ error: "Erro interno do servidor: " + err });
   } 
 });
 
