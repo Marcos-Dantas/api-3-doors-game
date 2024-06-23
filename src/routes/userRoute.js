@@ -1,13 +1,16 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import userController from '../controllers/userController.js';
-import getValidators from '../validators/validators.js';
+import { getValidators } from '../validators/validators.js';
 import dotenv from 'dotenv';
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { verifyApiKey, verifyToken } from '../middlewares/authMiddleware.js';
-import { Resend } from 'resend';
+import {
+  verifyApiKey,
+  verifyToken,
+  validateData,
+} from '../middlewares/authMiddleware.js';
 
 const resend = new Resend(process.env.RE_KEY);
 const routes = express.Router();
@@ -15,39 +18,17 @@ const routes = express.Router();
 const SECRET_KEY = process.env.SECRET_KEY;
 
 const prisma = new PrismaClient();
-const { createUserValidator, loginValidator } = getValidators(prisma);
+const { createUserValidator, loginValidator } = getValidators();
 
 dotenv.config();
 
-routes.post('/signup', verifyApiKey, createUserValidator, async (req, res) => {
-  const errors = validationResult(req);
-
-  if (errors.isEmpty()) {
-    const { name, email, password, city, state, age } = req.body;
-    // Gerar o hash da senha
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    const newUser = await prisma.user.create({
-      data: {
-        email: email,
-        name: name,
-        password: hashedPassword,
-        city: city,
-        state: state,
-        age: parseInt(age),
-      },
-    });
-    const newPlayer = await prisma.player.create({
-      data: {
-        userEmail: newUser.email,
-      },
-    });
-    return res.status(201).json(newUser);
-  } else {
-    return res.status(422).json({ errors: errors.array() });
-  }
-});
+routes.post(
+  '/signup',
+  verifyApiKey,
+  createUserValidator,
+  validateData,
+  userController.createUser,
+);
 
 routes.post('/login', verifyApiKey, loginValidator, async (req, res) => {
   const errors = validationResult(req);
@@ -72,14 +53,14 @@ routes.post('/login', verifyApiKey, loginValidator, async (req, res) => {
   }
 });
 
-routes.post("/sendmail", verifyApiKey, async (req, res) => {
+routes.post('/sendmail', verifyApiKey, async (req, res) => {
   try {
     const { email, message } = req.body;
     console.log(email, message);
     const { data, error } = await resend.emails.send({
-      from: "3DOORS <onboarding@resend.dev>",
-      to: ["3doors.suporte@gmail.com"],
-      subject: "Report",
+      from: '3DOORS <onboarding@resend.dev>',
+      to: ['3doors.suporte@gmail.com'],
+      subject: 'Report',
       html: `
       E-mail: ${email} <br>
       Report: ${message}
@@ -88,10 +69,10 @@ routes.post("/sendmail", verifyApiKey, async (req, res) => {
     if (error) {
       return res.status(400).json({ error });
     }
-    res.status(200).json({ message: "E-mail enviado com sucesso" });
-  }catch (err) {
-    res.status(500).json({ error: "Erro interno do servidor: " + err });
-  } 
+    res.status(200).json({ message: 'E-mail enviado com sucesso' });
+  } catch (err) {
+    res.status(500).json({ error: 'Erro interno do servidor: ' + err });
+  }
 });
 
 // rota de exemplo, apenas para testar a verificação do token de logado esta correta
@@ -103,6 +84,5 @@ routes.get('/users/:email', verifyApiKey, userController.findUserByEmail);
 routes.put('/users/:email', verifyApiKey, userController.atualizaDadosUser);
 routes.get('/users', verifyApiKey, userController.findAllUsers);
 routes.delete('/users', verifyApiKey, userController.deleteUser);
-
 
 export default routes;
