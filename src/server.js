@@ -3,8 +3,9 @@ import routes from './routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpecs from '../swaggerConfig.js';
 import YAML from 'yamljs';
+import path from 'path';
 const swaggerDocument = YAML.load(
-  process.cwd() + '/src/swagger/swaggerDocument.yaml',
+  path.join(process.cwd(), 'src', 'swagger', 'swaggerDocument.yaml'),
 );
 
 const PORT = 3000;

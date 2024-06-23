@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "a project created by inova/secti trilhas backend",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "vercel-build": "npx prisma generate",
     "dev": "node --watch ./src/server.js",
