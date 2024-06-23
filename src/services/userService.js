@@ -7,6 +7,15 @@ import {
 } from './exceptions/httpRequestError.js';
 
 export default class userService {
+  static createUser = async (newUser) => {
+    try {
+      const user = await User.createNewUser(newUser);
+      return user;
+    } catch (err) {
+      throw err;
+    }
+  };
+
   static findAllUsers = async () => {
     try {
       const users = await User.findAllUsers();
@@ -44,14 +53,11 @@ export default class userService {
     try {
       const user = await User.findByEmail(email);
       if (!user) {
-        throw new NotFound('Usuário não encontrado.');
+        return false;
       }
       delete user.password;
       return user;
     } catch (err) {
-      if (err instanceof NotFound) {
-        throw err;
-      }
       throw new InternalServerError();
     }
   };

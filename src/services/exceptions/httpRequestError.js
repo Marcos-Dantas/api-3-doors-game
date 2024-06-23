@@ -1,7 +1,7 @@
 export function BadRequest(message) {
   this.name = 'BadRequest';
   this.message = message || 'Bad Request';
-  this.status = 422;
+  this.status = 400;
 }
 
 export function InternalServerError(message) {

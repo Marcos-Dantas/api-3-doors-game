@@ -1,13 +1,32 @@
 import userService from '../services/userService.js';
-import { verifyApiKey } from '../middlewares/authMiddleware.js';
+import { validator } from '../validators/validators.js';
+import {
+  BadRequest,
+  NotFound,
+} from '../services/exceptions/httpRequestError.js';
 
 export default class userController {
+  static createUser = async (req, res) => {
+    try {
+      const newUser = await userService.createUser(req.body);
+      return res.status(201).json({ status: 201, message: 'Usuário criado.' });
+    } catch (err) {
+      return res.status(err.status || 500).json({
+        status: err.status || 500,
+        message: err.message || 'Internal Error',
+      });
+    }
+  };
+
   static findAllUsers = async (req, res) => {
     try {
       const users = await userService.findAllUsers();
       return res.status(200).json(users);
     } catch (err) {
-      return res.status(422).json({ errors: err });
+      return res.status(err.status || 500).json({
+        status: err.status || 500,
+        message: err.message || 'Internal Error',
+      });
     }
   };
 
@@ -26,6 +45,9 @@ export default class userController {
   static findUserByEmail = async (req, res) => {
     try {
       const user = await userService.findUserByEmail(req.params.email);
+      if (!user) {
+        throw new NotFound('Usuário não encontrado.');
+      }
       return res.status(200).json(user);
     } catch (err) {
       return res.status(err.status || 500).json({
