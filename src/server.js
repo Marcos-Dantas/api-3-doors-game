@@ -1,7 +1,6 @@
 import express from 'express';
 import routes from './routes/index.js';
 import swaggerUi from 'swagger-ui-express';
-import swaggerSpecs from '../swaggerConfig.js';
 import YAML from 'yamljs';
 import path from 'path';
 const swaggerDocument = YAML.load(

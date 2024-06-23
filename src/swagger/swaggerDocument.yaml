@@ -147,3 +147,68 @@ paths:
                     type: integer
                   message:
                     type: string
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string
+  /users/{email}:
+    get:
+      summary: Retorna informações cadastradas do usuário
+      tags:
+      - Usuários
+      parameters:
+      - name: email
+        in: path
+        schema: 
+          type: string
+        required: true
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Usuario-sem-senha"
+        404:
+          description: Falha ao executar
+          content:
+            application/json:
+              example: "Usuario não encontrado."
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string        
+
+components:
+  schemas:
+    Usuario-sem-senha:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        email:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        age:
+          type: integer
+        player:
+          type: object

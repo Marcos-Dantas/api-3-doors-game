@@ -76,7 +76,7 @@ routes.post('/login', verifyApiKey, loginValidator, async (req, res) => {
 // });
 
 routes.get('/users', userController.findAllUsers);
-
+routes.get('/users/:email', userController.findUserByEmail);
 routes.get('/users/top-ranking', userController.findTopRanking);
 
 export default routes;

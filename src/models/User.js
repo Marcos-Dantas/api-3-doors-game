@@ -7,9 +7,9 @@ export default class User {
     return await prisma.user.findMany();
   }
 
-  static async findById(email) {
+  static async findByEmail(email) {
     return await prisma.user.findUnique({
-      where: {},
+      where: { email: email },
     });
   }
 }

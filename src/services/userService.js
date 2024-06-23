@@ -1,6 +1,9 @@
 import User from '../models/User.js';
 import Player from '../models/Player.js';
-import { UnprocessableEntity } from './exceptions/httpRequestError.js';
+import {
+  NotFound,
+  UnprocessableEntity,
+} from './exceptions/httpRequestError.js';
 
 export default class userService {
   static findAllUsers = async () => {
@@ -27,6 +30,19 @@ export default class userService {
         });
       });
       return dadosUsers;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  static findUserByEmail = async (email) => {
+    try {
+      const user = await User.findByEmail(email);
+      if (!user) {
+        throw new NotFound('Usuário não encontrado.');
+      }
+      delete user.password;
+      return user;
     } catch (err) {
       throw err;
     }
