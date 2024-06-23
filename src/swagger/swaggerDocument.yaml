@@ -121,7 +121,7 @@ paths:
                     type: string
   /users/top-ranking:
     get:
-      summary: Lista de top jogadres
+      summary: Lista de top jogadores
       tags:
         - Usuários
       responses:
@@ -175,7 +175,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Usuario-sem-senha"
+                $ref: "#/components/schemas/User"
         404:
           description: Falha ao executar
           content:
@@ -195,7 +195,7 @@ paths:
 
 components:
   schemas:
-    Usuario-sem-senha:
+    User:
       type: object
       properties:
         id:
@@ -210,5 +210,3 @@ components:
           type: string
         age:
           type: integer
-        player:
-          type: object
