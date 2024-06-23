@@ -8,9 +8,9 @@ const swaggerDocument = YAML.load(
   path.join(process.cwd(), 'src', 'swagger', 'swaggerDocument.yaml'),
 );
 
-// CDN CSS
+// CDN CSS NECESSARIO PARA CARREGAR O SWAGGER EM PRODUÇÃO
 const CSS_URL =
-  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css';
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.17.14/swagger-ui.min.css';
 
 const PORT = 3000;
 var app = express();
