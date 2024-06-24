@@ -47,4 +47,39 @@ routes.put('/users/:email', verifyApiKey, userController.atualizaDadosUser);
 routes.get('/users', verifyApiKey, userController.findAllUsers);
 routes.delete('/users', verifyApiKey, userController.deleteUser);
 
+
+
+app.post('/pontuacao', async (req, res) => {
+  const { email, pontos } = req.body;
+  
+  try {
+      let playerScore = await prisma.playerScore.findUnique({
+          where: { email },
+      });
+
+      if (!playerScore) {
+          playerScore = await prisma.playerScore.create({
+              data: {
+                  email,
+                  pontos,
+              },
+          });
+      } else {
+          playerScore = await prisma.playerScore.update({
+              where: { email },
+              data: {
+                  pontos: {
+                      increment: pontos,
+                  },
+              },
+          });
+      }
+
+      res.send('Pontuação atualizada com sucesso!');
+  } catch (err) {
+      console.error('Erro ao atualizar pontuação:', err);
+      res.status(500).send('Erro ao atualizar pontuação');
+  }
+});
+
 export default routes;
