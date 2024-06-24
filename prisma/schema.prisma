@@ -15,17 +15,14 @@ model User {
   city String 
   state String
   age Int
-  player Player?
+  saveFiles SaveFile[]
 }
 
-model Player {
+model SaveFile {
     idPlayer String @id @default(uuid()) @unique 
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
     score Int?
-    timeFinishedGame DateTime?
-    question1 String? // Conhecia a Lenda?
-    question2 String?  // O jogo ajudou você a conhecer essas lendas?
+    timeTaken Int? // tempo em segundos
     user User @relation(fields: [userEmail], references: [email])
-    userEmail String @unique
+    userEmail String 
 }

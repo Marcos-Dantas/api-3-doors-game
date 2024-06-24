@@ -42,7 +42,7 @@ paths:
                 state:
                   type: string
                 age:
-                  type: string
+                  type: integer
       responses:
         201:
           description: Usuário criado com sucesso
@@ -106,7 +106,7 @@ paths:
                 properties:
                   id:
                     type: integer
-                  token:
+                  acess_token:
                     type: string
         400:
           description: Credenciais Inválidas
@@ -129,7 +129,59 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiKeyError"          
+                $ref: "#/components/schemas/ApiKeyError"
+  /sendEmail:
+    post:
+      summary: Envia um email para o nosso suporte da landing page
+      tags:
+        - Usuários
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                message:
+                  type: string
+      responses:
+        200:
+          description: E-mail enviado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        400:
+          description: Erro durante o envio do e-mail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+        401:
+          description: 	API Key inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        403:
+          description: API Key não fornecida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyError" 
+
   /users/top-ranking:
     get:
       summary: Lista de top jogadores
@@ -137,7 +189,7 @@ paths:
         - Usuários
       responses:
         200:
-          description: Sucesso
+          description: Sucesso (TimeTaken e o tempo em segundos)
           content:
             application/json:
               schema:
@@ -148,6 +200,8 @@ paths:
                   email:
                     type: string
                   score:
+                    type: integer
+                  timeTaken:
                     type: integer
         422:
           description: Unprocessable Entity
@@ -219,7 +273,7 @@ paths:
                   message:
                     type: string        
     delete:
-      summary: Deleta usuário e player
+      summary: Deleta usuário
       tags:
       - Usuários
       parameters:

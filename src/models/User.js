@@ -10,10 +10,6 @@ export default class User {
     return await prisma.user.create({
       data: {
         ...newUser,
-        player: { create: {} },
-      },
-      include: {
-        player: true,
       },
     });
   }

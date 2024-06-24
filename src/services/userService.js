@@ -1,5 +1,5 @@
 import User from '../models/User.js';
-import Player from '../models/Player.js';
+import Player from '../models/SaveFile.js';
 import {
   NotFound,
   UnprocessableEntity,
@@ -8,6 +8,7 @@ import {
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import SaveFile from '../models/SaveFile.js';
 
 export default class userService {
   static createUser = async (newUser) => {
@@ -31,16 +32,17 @@ export default class userService {
   static findRankingUsers = async () => {
     try {
       const limit = 3;
-      const topPlayers = await Player.topPlayers(limit);
-      if (!topPlayers || topPlayers.length === 0) {
+      const topPlayersSaveFile = await SaveFile.topPlayers(limit);
+      if (!topPlayersSaveFile || topPlayersSaveFile.length === 0) {
         throw new UnprocessableEntity('Lista de Score vazia.');
       }
       let dadosUsers = [];
-      topPlayers.map(async (player) => {
+      topPlayersSaveFile.map(async (savefile) => {
         dadosUsers.push({
-          nome: player.user.name,
-          email: player.userEmail,
-          score: player.score,
+          nome: savefile.user.name,
+          email: savefile.userEmail,
+          score: savefile.score,
+          timetaken: savefile.timeTaken // tempo em segundos
         });
       });
       return dadosUsers;
@@ -67,7 +69,7 @@ export default class userService {
 
   static deleteUser = async (email) => {
     try {
-      await Player.deletePlayer(email);
+      await SaveFile.deleteSaveFiles(email);
       await User.deleteUser(email);
       return true;
     } catch (err) {
@@ -98,7 +100,7 @@ export default class userService {
         { id: user.id, email: user.email },
         process.env.SECRET_KEY,
       );
-      return { id: user.id, token: token };
+      return { id: user.id, acess_token: token };
     } catch (err) {
       if (err instanceof NotFound) {
         throw err;
