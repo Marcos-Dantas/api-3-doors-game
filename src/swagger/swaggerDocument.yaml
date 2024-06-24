@@ -108,8 +108,15 @@ paths:
                     type: integer
                   token:
                     type: string
+        400:
+          description: Credenciais Inválidas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyError" 
+
         401:
-          description: Credenciais inválidas
+          description: 	API Key inválida
           content:
             application/json:
               schema:
@@ -176,9 +183,138 @@ paths:
                     type: integer
                   message:
                     type: string
+  /users:
+    get:
+      summary: Retorna todos os usuários
+      tags:
+      - Usuários
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        403:
+          description: API Key não fornecida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyError"   
+        401:
+          description: API Key inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyError"   
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string        
+    delete:
+      summary: Deleta usuário e player
+      tags:
+      - Usuários
+      parameters:
+      - name: email
+        in: path
+        schema: 
+          type: string
+        required: true
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Usuário deletado."
+        404:
+          description: Falha ao executar
+          content:
+            application/json:
+              example: "Usuario não encontrado."
+        403:
+          description: API Key não fornecida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyError"   
+        401:
+          description: API Key inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyError"   
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string        
   /users/{email}:
     get:
       summary: Retorna informações cadastradas do usuário
+      tags:
+      - Usuários
+      parameters:
+      - name: email
+        in: path
+        schema: 
+          type: string
+        required: true
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        404:
+          description: Falha ao executar
+          content:
+            application/json:
+              example: "Usuario não encontrado."
+        403:
+          description: API Key não fornecida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyError"   
+        401:
+          description: API Key inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyError"   
+        500:
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  message:
+                    type: string        
+    put:
+      summary: Altera as informações cadastradas do usuário
       tags:
       - Usuários
       parameters:
