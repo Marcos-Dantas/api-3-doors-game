@@ -32,14 +32,16 @@ export default class userController {
 
   static sendEmail = async (req, res) => {
     try {
-      const { email, message } = req.body;
+      const { email, message, nameUser, where } = req.body;
       const { data, error } = await resend.emails.send({
         from: '3DOORS <onboarding@resend.dev>',
         to: ['3doors.suporte@gmail.com'],
         subject: 'Report',
         html: `
-        E-mail: ${email} <br>
-        Report: ${message}
+          Nome: ${nameUser} <br>
+          E-mail: ${email} <br>
+          Local do problema: ${where}
+          Report: ${message}
         `,
       });
       if (error) {

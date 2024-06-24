@@ -146,6 +146,10 @@ paths:
                   type: string
                 message:
                   type: string
+                nameUser:
+                  type: string  
+                where:
+                  type: string
       responses:
         200:
           description: E-mail enviado com sucesso
