@@ -21,7 +21,7 @@ export const verifyToken = (req, res, next) => {
   const token = req.headers['authorization'];
 
   if (!token) {
-    return res.status(403).json({ error: 'Token não fornecido' });
+    return res.status(403).json({ error: 'Token de acesso não fornecido' });
   }
 
   // console.log(token)
@@ -31,7 +31,7 @@ export const verifyToken = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    return res.status(401).json({ error: 'Token inválido' });
+    return res.status(401).json({ error: 'Token de acesso inválido' });
   }
 };
 

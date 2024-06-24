@@ -19,6 +19,14 @@ export default class userService {
       throw err;
     }
   };
+  static createSaveFile = async (score, timeTaken, userEmail) => {
+    try {
+      const saveFile = await SaveFile.createSaveFile(score, timeTaken, userEmail);
+      return saveFile;
+    } catch (err) {
+      throw err;
+    }
+  };
 
   static findAllUsers = async () => {
     try {

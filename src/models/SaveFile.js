@@ -21,6 +21,19 @@ export default class SaveFile {
         },
       });
     }
+  static async createSaveFile(score, timeTaken, userEmail) {
+      return await prisma.saveFile.create({
+        data: {
+          score: score,
+          timeTaken: timeTaken,
+          user: {
+            connect: {
+              email: userEmail // Conecta com o usuário pelo email
+            }
+          }
+        }
+      });
+  }
 
   static async deleteSaveFiles(email) {
     return await prisma.saveFile.delete({

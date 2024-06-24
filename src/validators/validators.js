@@ -33,6 +33,10 @@ export const getValidators = () => ({
       'O comprimento mínimo da senha é de 6 caracteres',
     ).isLength({ min: 6 }),
   ],
+  storeUserInfoValidator: [
+    body('score', 'Pontuação não pode ser vazia').not().isEmpty(),
+    body('timeTaken', 'Tempo de finalização não pode ser vazio').not().isEmpty(),
+  ],
 });
 
 export const validator = (req) => {

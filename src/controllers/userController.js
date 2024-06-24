@@ -51,6 +51,19 @@ export default class userController {
     }
   };
 
+  static storeUserInfo = async (req, res) => {
+    try {
+      const { score, timeTaken } = req.body;
+      const user = await userService.createSaveFile(score, timeTaken, req.user.email);
+      return res.status(200).json({message: 'Pontuação atualizada com sucesso.' });
+    } catch (err) {
+      return res.status(err.status || 500).json({
+        status: err.status || 500,
+        message: err.message || 'Internal Error',
+      });
+    }
+  };
+
   static findAllUsers = async (req, res) => {
     try {
       const users = await userService.findAllUsers();
