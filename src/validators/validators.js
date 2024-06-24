@@ -27,7 +27,6 @@ export const getValidators = () => ({
     ).isLength({ min: 6 }),
   ],
   loginValidator: [
-    body('email', 'Email não pode ser vazio').not().isEmpty(),
     body('email', 'Email invalido').isEmail(),
     body(
       'password',

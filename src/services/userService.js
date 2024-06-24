@@ -5,6 +5,9 @@ import {
   UnprocessableEntity,
   InternalServerError,
 } from './exceptions/httpRequestError.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
 
 export default class userService {
   static createUser = async (newUser) => {
@@ -78,6 +81,29 @@ export default class userService {
       return userUpdated;
     } catch (err) {
       throw err;
+    }
+  };
+
+  static loginUser = async (email, password) => {
+    try {
+      const user = await User.findByEmail(email);
+      if (!user) {
+        throw new NotFound('Email ou senha incorretos.');
+      }
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        throw new NotFound('Email ou senha incorretos.');
+      }
+      const token = jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.SECRET_KEY,
+      );
+      return { id: user.id, token: token };
+    } catch (err) {
+      if (err instanceof NotFound) {
+        throw err;
+      }
+      throw new InternalServerError();
     }
   };
 }

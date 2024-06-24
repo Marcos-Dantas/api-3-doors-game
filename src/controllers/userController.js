@@ -1,5 +1,4 @@
 import userService from '../services/userService.js';
-import { validator } from '../validators/validators.js';
 import {
   BadRequest,
   NotFound,
@@ -15,6 +14,16 @@ export default class userController {
         status: err.status || 500,
         message: err.message || 'Internal Error',
       });
+    }
+  };
+
+  static login = async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await userService.loginUser(email, password);
+      return res.status(200).json({ id: user.id, token: user.token });
+    } catch (err) {
+      res.status(400).json(err);
     }
   };
 

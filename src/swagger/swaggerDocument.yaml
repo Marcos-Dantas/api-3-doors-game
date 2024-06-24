@@ -136,6 +136,8 @@ paths:
               schema:
                 type: object
                 properties:
+                  nome:
+                    type: string
                   email:
                     type: string
                   score:

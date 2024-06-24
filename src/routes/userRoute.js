@@ -1,11 +1,7 @@
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
 import userController from '../controllers/userController.js';
 import { getValidators } from '../validators/validators.js';
 import dotenv from 'dotenv';
-import { validationResult } from 'express-validator';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import {
   verifyApiKey,
   verifyToken,
@@ -16,9 +12,6 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RE_KEY);
 const routes = express.Router();
 
-const SECRET_KEY = process.env.SECRET_KEY;
-
-const prisma = new PrismaClient();
 const { createUserValidator, loginValidator } = getValidators();
 
 dotenv.config();
@@ -31,28 +24,13 @@ routes.post(
   userController.createUser,
 );
 
-routes.post('/login', verifyApiKey, loginValidator, async (req, res) => {
-  const errors = validationResult(req);
-  if (errors.isEmpty()) {
-    const { email, password } = req.body;
-
-    const user = await prisma.user.findUnique({
-      where: { email: email },
-    });
-
-    const passwordMatch = await bcrypt.compare(password, user.password);
-
-    if (!user || !passwordMatch) {
-      return res.status(401).json({ error: 'Credenciais inválidas' });
-    } else {
-      const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY);
-
-      return res.json({ id: user.id, token: token });
-    }
-  } else {
-    return res.status(422).json({ errors: errors.array() });
-  }
-});
+routes.post(
+  '/login',
+  verifyApiKey,
+  loginValidator,
+  validateData,
+  userController.login,
+);
 
 routes.post('/sendmail', verifyApiKey, async (req, res) => {
   try {
