@@ -182,77 +182,77 @@ paths:
               schema:
                 $ref: "#/components/schemas/ApiKeyError" 
   /store-user-info:
-  post:
-    summary: Envia as informações de pontuação do jogo para o nosso banco de dados
-    tags:
-      - Usuários
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              score:
-                type: integer
-              timeTaken:
-                type: integer
-    responses:
-      200:
-        description: Pontuação atualizada com sucesso
+    post:
+      summary: Envia as informações de pontuação do jogo para o nosso banco de dados
+      tags:
+        - Usuários
+      requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                message:
-                  type: string
-                  example: Pontuação atualizada com sucesso.
-      422:
-        description: Erros de validação
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                errors:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      param:
-                        type: string
+                score:
+                  type: integer
+                timeTaken:
+                  type: integer
+      responses:
+        200:
+          description: Pontuação atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Pontuação atualizada com sucesso.
+        422:
+          description: Erros de validação
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        param:
+                          type: string
 
-      401:
-        description: 	API Key inválida
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-      401:
-        description: 	Token de acesso inválido
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                error:
-                  type: string
-      403:
-        description: API Key não fornecida
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ApiKeyError" 
-      403:
-        description: Token de acesso não fornecido
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ApiKeyError" 
+        401:
+          description: 	API Key inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        401:
+          description: 	Token de acesso inválido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        403:
+          description: API Key não fornecida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyError" 
+        403:
+          description: Token de acesso não fornecido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiKeyError" 
 
   /users/top-ranking:
     get:
