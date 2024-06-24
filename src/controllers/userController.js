@@ -4,6 +4,9 @@ import {
   NotFound,
 } from '../services/exceptions/httpRequestError.js';
 
+import { Resend } from 'resend';
+const resend = new Resend(process.env.RE_KEY);
+
 export default class userController {
   static createUser = async (req, res) => {
     try {
@@ -24,6 +27,27 @@ export default class userController {
       return res.status(200).json({ id: user.id, token: user.token });
     } catch (err) {
       res.status(400).json(err);
+    }
+  };
+
+  static sendEmail = async (req, res) => {
+    try {
+      const { email, message } = req.body;
+      const { data, error } = await resend.emails.send({
+        from: '3DOORS <onboarding@resend.dev>',
+        to: ['3doors.suporte@gmail.com'],
+        subject: 'Report',
+        html: `
+        E-mail: ${email} <br>
+        Report: ${message}
+        `,
+      });
+      if (error) {
+        return res.status(400).json({ error });
+      }
+      res.status(200).json({ message: 'E-mail enviado com sucesso' });
+    } catch (err) {
+      res.status(500).json({ error: 'Erro interno do servidor: ' + err });
     }
   };
 
