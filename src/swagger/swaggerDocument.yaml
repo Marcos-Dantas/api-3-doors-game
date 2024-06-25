@@ -200,7 +200,7 @@ paths:
                 score:
                   type: integer
                 timeTaken:
-                  type: integer
+                  type: float
       responses:
         200:
           description: Pontuação atualizada com sucesso

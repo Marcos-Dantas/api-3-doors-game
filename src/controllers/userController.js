@@ -56,7 +56,8 @@ export default class userController {
   static storeUserInfo = async (req, res) => {
     try {
       const { score, timeTaken } = req.body;
-      const user = await userService.createSaveFile(score, timeTaken, req.user.email);
+      let rounded_timeTaken = Math.round(timeTaken);
+      const user = await userService.createSaveFile(score, rounded_timeTaken, req.user.email);
       return res.status(200).json({message: 'Pontuação atualizada com sucesso.' });
     } catch (err) {
       return res.status(err.status || 500).json({

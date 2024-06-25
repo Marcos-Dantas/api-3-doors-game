@@ -45,10 +45,6 @@ routes.post(
   userController.storeUserInfo,
 );
 
-// rota de exemplo, apenas para testar a verificação do token de logado esta correta
-// routes.post('/store-user-informations', verifyApiKey, verifyToken, async (req, res) => {
-//     return res.json({resuld:'parabens!! dados do seu usuario foram armazenados'});
-// });
 routes.get('/users/top-ranking', verifyApiKey, userController.findTopRanking);
 routes.get('/users/:email', verifyApiKey, userController.findUserByEmail);
 routes.put('/users/:email', verifyApiKey, userController.atualizaDadosUser);
