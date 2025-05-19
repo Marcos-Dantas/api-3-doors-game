@@ -8,3 +8,6 @@ crie um arquivo .env com as variaveis de ambiente que são necessarias, para rod
 
 ## Pronto você pode rodar o projeto utilizando o comando
 node src/server.js
+
+### Documentação
+https://api-3-doors-game.vercel.app/api-docs/
